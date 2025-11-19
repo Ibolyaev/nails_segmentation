@@ -5,7 +5,7 @@ import torch.nn as nn
 
 from timm.models.efficientnet import EfficientNet
 from timm.models.efficientnet import decode_arch_def, round_channels, default_cfgs
-from timm.models.layers.activations import Swish
+from timm.layers.activations import Swish
 
 from ._base import EncoderMixin
 
@@ -156,15 +156,15 @@ class EfficientNetLiteEncoder(EfficientNetBaseEncoder):
         super().__init__(stage_idxs, out_channels, depth, **kwargs)
 
 
-def prepare_settings(settings):
+def prepare_settings(default_cfg):
     return {
-        "mean": settings["mean"],
-        "std": settings["std"],
-        "url": settings["url"],
-        "input_range": (0, 1),
-        "input_space": "RGB",
-    }
-
+        "input_size": default_cfg.input_size if hasattr(default_cfg, "input_size") else None,
+        "mean": tuple(default_cfg.mean) if hasattr(default_cfg, "mean") else None,
+        "std": tuple(default_cfg.std) if hasattr(default_cfg, "std") else None,
+        "num_classes": default_cfg.num_classes if hasattr(default_cfg, "num_classes") else None,
+        "interpolation": default_cfg.interpolation if hasattr(default_cfg, "interpolation") else "bilinear",
+        "crop_pct": default_cfg.crop_pct if hasattr(default_cfg, "crop_pct") else 0.875,
+        }
 
 timm_efficientnet_encoders = {
     "timm-efficientnet-b0": {

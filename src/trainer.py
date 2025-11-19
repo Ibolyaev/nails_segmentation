@@ -100,7 +100,7 @@ class Trainer:
         best_model_path = get_final_path(1, ['model', 'best_model.pth'])
         # load best saved model checkpoint from previous commit (if present)
         if os.path.exists(best_model_path) and self.is_cont == True:
-            model = torch.load(best_model_path, map_location=self.device)
+            model = torch.load(best_model_path, map_location=self.device, weights_only=False)
         
         train_epoch = utils.train.TrainEpoch(
                                             model, 
